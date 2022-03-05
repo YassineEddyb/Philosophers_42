@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/02/24 12:32:40 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/05 11:19:12 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void create_threads(t_philo *philo, int num_of_philos)
 void get_philos_data(t_philo *philo, char **argv, int argc, int num_of_philos)
 {
     int i;
+    int dead = 0;
     pthread_mutex_t *forks;
     pthread_mutex_t msg;
 
@@ -62,7 +63,7 @@ void get_philos_data(t_philo *philo, char **argv, int argc, int num_of_philos)
         if (argc == 6)
             philo[i].number_of_meals = ft_atoi(argv[5]);
         philo[i].meals_counter = 0;
-        philo[i].dead = 0;
+        philo[i].dead = &dead;
         philo[i].time_stamp = 0;
         philo[i].forks = forks;
         philo[i].last_meal = get_time();
@@ -92,16 +93,18 @@ void *sumulate(void *arg)
         take_fork(philo);
         if (philo->time_to_die < philo->time_to_eat)
         {
+            pthread_mutex_lock(philo->msg);
             dead(philo, philo->time_to_die, "eating");
-            return NULL;
+            return (NULL);
         } else
             eating(philo);
         pthread_mutex_unlock(&(philo->forks[next_philo_id - 1]));
         pthread_mutex_unlock(&(philo->forks[philo->philo_id - 1]));
         if (is_about_to_die(philo, philo->time_to_sleep))
         {
+            pthread_mutex_lock(philo->msg);
             dead(philo, is_about_to_die(philo, philo->time_to_sleep), "sleeping");
-            return NULL;
+            return (NULL);
         } else
             sleeping(philo);
         thinking(philo);
@@ -120,15 +123,33 @@ void *count_meals(void *arg)
         i = 0;
         while (i < philo[i].num_of_philos)
         {
-            if (philo[i].dead == 1)
-                return (NULL);
             if (philo[i].meals_counter < philo[i].number_of_meals)
                 break ;
             if (i == philo[i].num_of_philos - 1)
                 return (NULL);
             i++;
         }
-        usleep(100);
+    }
+}
+
+void *is_dead(void *arg)
+{
+    int i;
+	t_philo *philo;
+
+	philo = (t_philo *)arg;
+    while(1)
+    {
+        i = 0;
+        while (i < philo[i].num_of_philos)
+        {
+            if (*(philo[i].dead) == 1)
+            {
+                printf("\033[0;31m%ld %d is dead\n",(get_time() - philo[i].start_time) / 1000, philo[i].philo_id);
+                return (NULL);
+            }
+            i++;
+        }
     }
 }
 
@@ -138,7 +159,8 @@ int main(int argc, char **argv)
     int num_of_philos;
     t_philo *philo;
     //size_t start_time;
-    pthread_t id;
+    pthread_t id1;
+    pthread_t id2;
 
     num_of_philos = ft_atoi(argv[1]);
     philo = malloc(num_of_philos * sizeof(t_philo));
@@ -147,10 +169,13 @@ int main(int argc, char **argv)
     i = 0;
     while(i < num_of_philos)
     {
+        pthread_create(&id2, NULL, &is_dead, philo);
+        if (!pthread_join(id2, NULL))
+            return (0);
         if (argc == 6)
         {
-            pthread_create(&id, NULL, &count_meals, philo);
-            if (!pthread_join(id, NULL))
+            pthread_create(&id1, NULL, &count_meals, philo);
+            if (!pthread_join(id1, NULL))
                 return (0);
         }
         if (!pthread_join(philo[i].thread_id, NULL))

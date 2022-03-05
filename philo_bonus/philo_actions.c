@@ -6,11 +6,11 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 11:40:58 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/03 10:11:12 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/04 11:19:17 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void eating(t_philo *philo)
 {

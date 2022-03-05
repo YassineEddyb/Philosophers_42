@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/09 10:40:27 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/02/22 09:16:58 by yed-dyb          ###   ########.fr       */
+/*   Created: 2022/03/04 09:29:54 by yed-dyb           #+#    #+#             */
+/*   Updated: 2022/03/04 11:39:47 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef PHILO_H
-# define PHILO_H
+# ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 #include <sys/time.h>
+#include <semaphore.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -21,7 +22,7 @@
 #include <sys/time.h>
 
 typedef struct s_philo {
-    pthread_t thread_id;
+    int pid;
     int philo_id;
     int num_of_philos;
     int time_to_eat;
@@ -29,7 +30,7 @@ typedef struct s_philo {
     int time_to_die;
     int number_of_meals;
     int meals_counter;
-    pthread_mutex_t *forks;
+    sem_t *forks;
     pthread_mutex_t *msg;
     int *time_stamp; 
     long int start_time;
