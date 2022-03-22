@@ -1,15 +1,15 @@
-BONUS_SRCS 		= philo_bonus.c philo_actions.c philo_utils.c ft_atoi.c
-BONUS_NAME 		= philo_bonus
+SRCS			= philo.c philo_actions.c philo_utils.c ft_atoi.c
+NAME			= philo
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror
 
-all : $(BONUS_NAME)
+all : $(NAME)
 
-$(BONUS_NAME): $(BONUS_SRCS)
-	$(CC) $(CFLAGS) $(BONUS_SRCS) -o $(BONUS_NAME)
+$(NAME): $(SRCS)
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
 
 fclean:
-	rm -f $(BONUS_NAME)
+	rm -f $(NAME)
 
 re : fclean all
 

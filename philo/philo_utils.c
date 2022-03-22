@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 11:44:58 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/21 12:28:48 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/21 17:16:39 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_usleep(long delay)
 
 	start = get_time();
 	while (get_time() - start < delay)
-		usleep(10);
+		usleep(1qq);
 }
 
 void	init_data(t_philo *philo, char **argv, int argc)
