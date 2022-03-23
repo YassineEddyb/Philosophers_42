@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:35:02 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/22 14:44:33 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/23 11:02:52 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,17 @@ void	eating(t_philo *philo)
 	sem_post(philo->msg);
 	philo->last_meal = get_time();
 	ft_usleep(philo->time_to_eat);
-	(philo->meals_counter)++;
+	if (philo->argc == 6)
+	{
+		(philo->meals_counter)++;
+		if (philo->meals_counter == philo->number_of_meals)
+		{
+			if (philo->philo_id == philo->philos)
+				exit(3);
+			else
+				exit(2);
+		}
+	}
 }
 
 void	sleeping(t_philo *philo)

@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/21 17:07:32 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/23 11:31:26 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,17 @@ void	*count_meals(void *arg)
 		while (i < philo[i].philos)
 		{
 			if (*(philo[i].dead) == 1)
+			{
+				distroy_mutexes(philo->forks, philo->msg, philo->philos);
 				return (NULL);
+			}
 			if (philo[i].meals_counter < philo[i].number_of_meals)
 				break ;
 			if (i == philo[i].philos - 1)
+			{
+				distroy_mutexes(philo->forks, philo->msg, philo->philos);
 				return (NULL);
+			}
 			i++;
 		}
 	}
@@ -110,7 +116,6 @@ void	*count_meals(void *arg)
 
 int	main(int argc, char **argv)
 {
-	int			i;
 	int			num_of_philos;
 	t_philo		*philo;
 	pthread_t	id;
@@ -126,12 +131,11 @@ int	main(int argc, char **argv)
 	}
 	while (1)
 	{
-		i = 0;
-		while (i < num_of_philos)
+		if (*(philo->dead) == 1)
 		{
-			if (*(philo[i].dead) == 1)
-				return (0);
-			i++;
+			distroy_mutexes(philo->forks, philo->msg, num_of_philos);
+			return (0);
 		}
 	}
+	system("leaks philo");
 }
