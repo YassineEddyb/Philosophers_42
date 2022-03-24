@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:34:40 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/22 19:38:22 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/24 10:06:55 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,7 @@ void		fill_data(t_philo *philo, char **argv, \
 				pthread_mutex_t *forks, int i);
 void		init_data(t_philo *philo, char **argv, int argc);
 void		init_forks(pthread_mutex_t *forks, int num_of_philos);
+void		init_semaphores(sem_t *forks, sem_t *msg, int nphilos);
+void		kill_all_proccessors(t_philo *philo);
 
 #endif
