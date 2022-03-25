@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 11:44:58 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/24 11:47:53 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 18:34:14 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@ long int	get_time(void)
 
 	gettimeofday(&start, NULL);
 	return ((start.tv_sec * 1000000 + start.tv_usec) / 1000);
-}
-
-long int	is_about_to_die(t_philo *philo, long time_to)
-{
-	if (philo->time_to_die - (get_time() - philo->last_meal) <= time_to)
-		return (philo->time_to_die - (get_time() - philo->last_meal));
-	return (0);
 }
 
 void	ft_usleep(long delay)

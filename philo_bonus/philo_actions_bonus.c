@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:35:02 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 10:50:30 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 18:33:47 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,4 @@ void	take_fork(t_philo *philo)
 	printf("%ld %d has take a fork\n", \
 		(get_time() - philo->start_time), philo->philo_id);
 	sem_post(philo->msg);
-}
-
-void	dead(t_philo *philo, int s, char *str)
-{
-	sem_wait(philo->msg);
-	printf("%ld %d is %s\n", (get_time() - \
-		philo->start_time), philo->philo_id, str);
-	sem_post(philo->msg);
-	ft_usleep(s);
-	sem_wait(philo->msg);
-	printf("\033[0;31m%ld %d died\n", \
-		(get_time() - philo->start_time), philo->philo_id);
-	exit(0);
 }

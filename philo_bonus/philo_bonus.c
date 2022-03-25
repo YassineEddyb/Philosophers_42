@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 11:15:06 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 18:38:23 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,44 @@ void	get_philos_data(t_philo *philo, char **argv, int argc, int nphilos)
 	create_procceses(philo, nphilos);
 }
 
+void	*check_death(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	while(1)
+	{
+			if (get_time() - philo->last_meal > philo->time_to_die)
+			{
+				sem_wait(philo->msg);
+				printf("\033[0;31m%ld %d died\n", \
+					(get_time() - philo->start_time), philo->philo_id);
+				exit(0);
+			}
+	}
+}
+
 void	sumulate(t_philo *philo)
 {
+	pthread_t id;
+
+	pthread_create(&id, NULL, &check_death, philo);
 	while (1)
 	{
 		sem_wait(philo->forks);
-		take_fork(philo);
+		sem_wait(philo->msg);
+		printf("%ld %d has take a fork\n", \
+			(get_time() - philo->start_time), philo->philo_id);
+		sem_post(philo->msg);
 		sem_wait(philo->forks);
-		take_fork(philo);
-		if (philo->time_to_die < philo->time_to_eat)
-			dead(philo, philo->time_to_die, "eating");
-		else
-			eating(philo);
+		sem_wait(philo->msg);
+		printf("%ld %d has take a fork\n", \
+			(get_time() - philo->start_time), philo->philo_id);
+		sem_post(philo->msg);
+		eating(philo);
 		sem_post(philo->forks);
 		sem_post(philo->forks);
-		if (is_about_to_die(philo, philo->time_to_sleep))
-			dead(philo, is_about_to_die(philo, \
-			philo->time_to_sleep), "sleeping");
-		else
-			sleeping(philo);
+		sleeping(philo);
 		thinking(philo);
 	}
 }
