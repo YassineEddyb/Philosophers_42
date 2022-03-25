@@ -6,49 +6,46 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 11:13:37 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 15:51:31 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	create_threads(t_philo *philo, int num_of_philos)
+void	create_threads(t_philo *philo, int nphilos)
 {
 	int	i;
 
 	i = 0;
-	while (i < num_of_philos)
+	while (i < nphilos)
 	{
 		pthread_create(&(philo[i].thread_id), NULL, &sumulate, &(philo[i]));
 		i += 2;
 	}
 	usleep(100);
 	i = 1;
-	while (i < num_of_philos)
+	while (i < nphilos)
 	{
 		pthread_create(&(philo[i].thread_id), NULL, &sumulate, &(philo[i]));
 		i += 2;
 	}
 }
 
-void	get_philos_data(t_philo *philo, char **argv, int argc, int philos)
+void	get_philos_data(t_philo *philo, char **argv, int argc, int nphilos)
 {
 	int				i;
-	int				dead;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*msg;
 
-	dead = 0;
 	msg = malloc(1 * sizeof(pthread_mutex_t));
 	pthread_mutex_init(msg, NULL);
-	forks = malloc(philos * sizeof(pthread_mutex_t));
-	init_forks(forks, philos);
+	forks = malloc(nphilos * sizeof(pthread_mutex_t));
+	init_forks(forks, nphilos);
 	i = 0;
-	while (i < philos)
+	while (i < nphilos)
 	{
 		init_data(&(philo[i]), argv, argc);
 		philo[i].meals_counter = 0;
-		philo[i].dead = &dead;
 		philo[i].forks = forks;
 		philo[i].last_meal = get_time();
 		philo[i].philo_id = i + 1;
@@ -56,7 +53,7 @@ void	get_philos_data(t_philo *philo, char **argv, int argc, int philos)
 		philo[i].start_time = get_time();
 		i++;
 	}
-	create_threads(philo, philos);
+	create_threads(philo, nphilos);
 }
 
 void	*sumulate(void *arg)
@@ -68,19 +65,11 @@ void	*sumulate(void *arg)
 	{
 		pthread_mutex_lock(&(philo->forks[philo->philo_id - 1]));
 		take_fork(philo);
-		pthread_mutex_lock(&(philo->forks[philo->philo_id % philo->philos]));
-		take_fork(philo);
-		if (philo->time_to_die < philo->time_to_eat)
-			dead(philo, philo->time_to_die, "eating");
-		else
-			eating(philo);
-		pthread_mutex_unlock(&(philo->forks[philo->philo_id % philo->philos]));
+		pthread_mutex_lock(&(philo->forks[philo->philo_id % philo->nphilos]));
+		eating(philo);
+		pthread_mutex_unlock(&(philo->forks[philo->philo_id % philo->nphilos]));
 		pthread_mutex_unlock(&(philo->forks[philo->philo_id - 1]));
-		if (is_about_to_die(philo, philo->time_to_sleep))
-			dead(philo, is_about_to_die(philo, \
-			philo->time_to_sleep), "sleeping");
-		else
-			sleeping(philo);
+		sleeping(philo);
 		thinking(philo);
 	}
 	return (NULL);
@@ -95,18 +84,13 @@ void	*count_meals(void *arg)
 	while (1)
 	{
 		i = 0;
-		while (i < philo[i].philos)
+		while (i < philo[i].nphilos)
 		{
-			if (*(philo[i].dead) == 1)
-			{
-				distroy_mutexes(philo->forks, philo->msg, philo->philos);
-				return (NULL);
-			}
 			if (philo[i].meals_counter < philo[i].number_of_meals)
 				break ;
-			if (i == philo[i].philos - 1)
+			if (i == philo[i].nphilos - 1)
 			{
-				distroy_mutexes(philo->forks, philo->msg, philo->philos);
+				destroy_mutexes(philo->forks, philo->msg, philo->nphilos);
 				return (NULL);
 			}
 			i++;
@@ -116,27 +100,26 @@ void	*count_meals(void *arg)
 
 int	main(int argc, char **argv)
 {
-	int			num_of_philos;
+	int			nphilos;
 	t_philo		*philo;
 	pthread_t	id;
+	int			i;
 
 	if (argc < 5)
 		exit(1);
-	num_of_philos = ft_atoi(argv[1]);
-	philo = malloc(num_of_philos * sizeof(t_philo));
-	get_philos_data(philo, argv, argc, num_of_philos);
+	nphilos = ft_atoi(argv[1]);
+	philo = malloc(nphilos * sizeof(t_philo));
+	get_philos_data(philo, argv, argc, nphilos);
 	if (argc == 6)
 	{
 		pthread_create(&id, NULL, &count_meals, philo);
 		if (pthread_join(id, NULL) == 0)
 			return (0);
 	}
+	i = 0;
 	while (1)
 	{
-		if (*(philo->dead) == 1)
-		{
-			distroy_mutexes(philo->forks, philo->msg, num_of_philos);
+		if (!check_death(philo, nphilos))
 			return (0);
-		}
 	}
 }

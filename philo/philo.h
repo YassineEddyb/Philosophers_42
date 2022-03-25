@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:34:40 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/24 11:59:36 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 15:50:36 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 typedef struct s_philo {
 	pthread_t		thread_id;
 	int				philo_id;
-	int				philos;
+	int				nphilos;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
@@ -32,7 +32,6 @@ typedef struct s_philo {
 	pthread_mutex_t	*msg;
 	long int		start_time;
 	int long		last_meal;
-	int				*dead;
 }	t_philo;
 
 void		*sumulate(void *arg);
@@ -41,15 +40,15 @@ void		eating(t_philo *philo);
 void		sleeping(t_philo *philo);
 void		thinking(t_philo *philo);
 void		take_fork(t_philo *philo);
-void		dead(t_philo *philo, int s, char *str);
+void		dead(t_philo *philo);
 long int	get_time(void);
 void		ft_usleep(long delay);
-long int	is_about_to_die(t_philo *philo, long time_to);
+int			check_death(t_philo *philo, int nphilos);
 void		fill_data(t_philo *philo, char **argv, \
 				pthread_mutex_t *forks, int i);
 void		init_data(t_philo *philo, char **argv, int argc);
 void		init_forks(pthread_mutex_t *forks, int num_of_philos);
-void		distroy_mutexes(pthread_mutex_t *forks, \
+void		destroy_mutexes(pthread_mutex_t *forks, \
 				pthread_mutex_t *msg, int nphilos);
 
 #endif
