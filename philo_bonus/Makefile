@@ -1,12 +1,12 @@
-SRCS			= philo.c philo_actions.c philo_utils.c philo_inits.c ft_atoi.c
-NAME			= philo
+SRCS			= philo_bonus.c philo_actions_bonus.c philo_utils_bonus.c philo_inits_bonus.c ft_atoi.c
+NAME			= philo_bonus
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror
 
 all : $(NAME)
 
 $(NAME): $(SRCS)
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME) -fsanitize=address
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
 
 fclean:
 	rm -f $(NAME)

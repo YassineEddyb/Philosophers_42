@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/24 10:09:07 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 11:09:47 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void	create_procceses(t_philo *philo, int num_of_philos)
 {
 	int	i;
-	int	pid;
 
 	i = 0;
 	while (i < num_of_philos)
 	{
-		pid = fork();
-		if (pid == 0)
+		philo[i].pid = fork();
+		if (philo[i].pid == 0)
 		{
 			sumulate(&(philo[i]));
 			exit(0);
 		}
-		else
-			philo[i].pid = pid;
 		i++;
 	}
 }
@@ -35,20 +32,21 @@ void	create_procceses(t_philo *philo, int num_of_philos)
 void	get_philos_data(t_philo *philo, char **argv, int argc, int nphilos)
 {
 	int		i;
-	int		dead;
 	sem_t	*forks;
 	sem_t	*msg;
 
-	forks = NULL;
-	msg = NULL;
-	init_semaphores(forks, msg, nphilos);
-	dead = 0;
+	sem_unlink("msg");
+	sem_unlink("semaphore");
+	msg = sem_open("msg", O_CREAT | O_EXCL, 0644, 1);
+	if (msg == SEM_FAILED)
+		exit(1);
+	forks = sem_open("semaphore", O_CREAT | O_EXCL, 0644, nphilos);
+	if (forks == SEM_FAILED)
+		exit(1);
 	i = 0;
 	while (i < nphilos)
 	{
 		init_data(&(philo[i]), argv, argc);
-		philo[i].meals_counter = 0;
-		philo[i].dead = &dead;
 		philo[i].forks = forks;
 		philo[i].last_meal = get_time();
 		philo[i].philo_id = i + 1;
@@ -83,35 +81,6 @@ void	sumulate(t_philo *philo)
 	}
 }
 
-void	*count_meals(void *arg)
-{
-	int		i;
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	while (1)
-	{
-		i = 0;
-		while (i < philo[i].philos)
-		{
-			if (*(philo[i].dead) == 1)
-			{
-				printf("Ok\n");
-				kill_all_proccessors(philo);
-				exit(0);
-			}
-			if (philo[i].meals_counter < philo[i].number_of_meals)
-				break ;
-			if (i == philo[i].philos - 1)
-			{
-				kill_all_proccessors(philo);
-				exit(0);
-			}
-			i++;
-		}
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	int		status;
@@ -133,5 +102,5 @@ int	main(int argc, char **argv)
 		}
 		i++;
 	}
-	kill_all_proccessors(philo);
+	return (0);
 }

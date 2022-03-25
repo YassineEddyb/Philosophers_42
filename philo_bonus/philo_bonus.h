@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:34:40 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/24 10:06:55 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 11:04:47 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
-# include <sys/time.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -53,7 +52,7 @@ void		fill_data(t_philo *philo, char **argv, \
 				pthread_mutex_t *forks, int i);
 void		init_data(t_philo *philo, char **argv, int argc);
 void		init_forks(pthread_mutex_t *forks, int num_of_philos);
-void		init_semaphores(sem_t *forks, sem_t *msg, int nphilos);
+void		init_semaphore(t_philo *philo, int i);
 void		kill_all_proccessors(t_philo *philo);
 
 #endif

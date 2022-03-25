@@ -6,14 +6,13 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:34:40 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/23 11:17:18 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/24 11:59:36 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <sys/time.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
