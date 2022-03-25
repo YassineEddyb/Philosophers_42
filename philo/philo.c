@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/23 11:31:26 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/25 11:13:37 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int	main(int argc, char **argv)
 	t_philo		*philo;
 	pthread_t	id;
 
+	if (argc < 5)
+		exit(1);
 	num_of_philos = ft_atoi(argv[1]);
 	philo = malloc(num_of_philos * sizeof(t_philo));
 	get_philos_data(philo, argv, argc, num_of_philos);
@@ -137,5 +139,4 @@ int	main(int argc, char **argv)
 			return (0);
 		}
 	}
-	system("leaks philo");
 }
