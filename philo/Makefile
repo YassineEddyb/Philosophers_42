@@ -8,7 +8,9 @@ all : $(NAME)
 $(NAME): $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
 
-fclean:
+clean:
+
+fclean: clean
 	rm -f $(NAME)
 
 re : fclean all
