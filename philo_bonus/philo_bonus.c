@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 18:38:23 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/26 12:54:13 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,22 @@ void	*check_death(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while(1)
+	while (1)
 	{
-			if (get_time() - philo->last_meal > philo->time_to_die)
-			{
-				sem_wait(philo->msg);
-				printf("\033[0;31m%ld %d died\n", \
-					(get_time() - philo->start_time), philo->philo_id);
-				exit(0);
-			}
+		if (get_time() - philo->last_meal > philo->time_to_die)
+		{
+			sem_wait(philo->msg);
+			printf("\033[0;31m%ld %d died\n", \
+				(get_time() - philo->start_time), philo->philo_id);
+			exit(0);
+		}
+		usleep(100);
 	}
 }
 
 void	sumulate(t_philo *philo)
 {
-	pthread_t id;
+	pthread_t	id;
 
 	pthread_create(&id, NULL, &check_death, philo);
 	while (1)
