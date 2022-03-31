@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 10:05:30 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 11:09:05 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/31 09:45:48 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,18 @@ void	init_data(t_philo *philo, char **argv, int argc)
 		philo->number_of_meals = ft_atoi(argv[5]);
 	philo->meals_counter = 0;
 	philo->dead = &dead;
+}
+
+int	is_numbers(char **argv)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i])
+	{
+		if (ft_atoi(argv[i]) <= 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }

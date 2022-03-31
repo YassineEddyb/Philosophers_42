@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:07:57 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 15:40:21 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/30 15:10:04 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,18 @@ void	init_forks(pthread_mutex_t *forks, int nphilos)
 		pthread_mutex_init(&(forks[i]), NULL);
 		i++;
 	}
+}
+
+int	is_numbers(char **argv)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i])
+	{
+		if (ft_atoi(argv[i]) <= 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }

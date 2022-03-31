@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 15:51:31 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/31 09:41:56 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	*sumulate(void *arg)
 		pthread_mutex_lock(&(philo->forks[philo->philo_id - 1]));
 		take_fork(philo);
 		pthread_mutex_lock(&(philo->forks[philo->philo_id % philo->nphilos]));
+		take_fork(philo);
 		eating(philo);
 		pthread_mutex_unlock(&(philo->forks[philo->philo_id % philo->nphilos]));
 		pthread_mutex_unlock(&(philo->forks[philo->philo_id - 1]));
@@ -86,6 +87,12 @@ void	*count_meals(void *arg)
 		i = 0;
 		while (i < philo[i].nphilos)
 		{
+			if (get_time() - philo[i].last_meal > philo[i].time_to_die)
+			{
+				dead(&(philo[i]));
+				destroy_mutexes(philo->forks, philo->msg, philo->nphilos);
+				return (0);
+			}
 			if (philo[i].meals_counter < philo[i].number_of_meals)
 				break ;
 			if (i == philo[i].nphilos - 1)
@@ -103,10 +110,13 @@ int	main(int argc, char **argv)
 	int			nphilos;
 	t_philo		*philo;
 	pthread_t	id;
-	int			i;
 
-	if (argc < 5)
+	if (argc < 5 || argc > 6 || is_numbers(argv))
+	{
+		printf("Usage: number_of_philosophers[number] time_to_die[number] \n\
+		time_to_eat[number] time_to_sleep[number]\n");
 		exit(1);
+	}
 	nphilos = ft_atoi(argv[1]);
 	philo = malloc(nphilos * sizeof(t_philo));
 	get_philos_data(philo, argv, argc, nphilos);
@@ -116,7 +126,6 @@ int	main(int argc, char **argv)
 		if (pthread_join(id, NULL) == 0)
 			return (0);
 	}
-	i = 0;
 	while (1)
 	{
 		if (!check_death(philo, nphilos))

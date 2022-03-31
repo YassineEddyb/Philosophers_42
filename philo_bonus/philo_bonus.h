@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 12:34:40 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/25 18:35:18 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/30 15:11:18 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ void		fill_data(t_philo *philo, char **argv, \
 void		init_data(t_philo *philo, char **argv, int argc);
 void		init_semaphore(t_philo *philo, int i);
 void		kill_all_proccessors(t_philo *philo);
+int			is_numbers(char **argv);
 
 #endif

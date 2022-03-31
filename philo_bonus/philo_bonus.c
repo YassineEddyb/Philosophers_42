@@ -6,7 +6,7 @@
 /*   By: yed-dyb <yed-dyb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 10:40:31 by yed-dyb           #+#    #+#             */
-/*   Updated: 2022/03/26 12:54:13 by yed-dyb          ###   ########.fr       */
+/*   Updated: 2022/03/30 15:13:58 by yed-dyb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,12 @@ int	main(int argc, char **argv)
 	t_philo	*philo;
 	int		i;
 
-	if (argc < 5)
+	if (argc < 5 || argc > 6 || is_numbers(argv))
+	{
+		printf("Usage: number_of_philosophers[number] time_to_die[number] \n\
+		time_to_eat[number] time_to_sleep[number]\n");
 		exit(1);
+	}
 	num_of_philos = ft_atoi(argv[1]);
 	philo = malloc(num_of_philos * sizeof(t_philo));
 	get_philos_data(philo, argv, argc, num_of_philos);

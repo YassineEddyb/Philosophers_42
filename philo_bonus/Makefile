@@ -13,6 +13,8 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
+bonus: $(NAME)
+
 re : fclean all
 
 .PHONY: re all fclean
